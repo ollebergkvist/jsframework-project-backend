@@ -1,8 +1,8 @@
 # Jsframework-finalproject-backend
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-finalproject-backend/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-finalproject-backend/?branch=main)
-[![Code Coverage](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-finalproject-backend/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-finalproject-backend/?branch=main)
-[![Build Status](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-finalproject-backend/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-finalproject-backend/build-status/main)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-project-backend/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-project-backend/?branch=main)
+[![Code Coverage](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-project-backend/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-project-backend/?branch=main)
+[![Build Status](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-project-backend/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ollebergkvist/jsframework-project-backend/build-status/main)
 
 ### Project setup
 
