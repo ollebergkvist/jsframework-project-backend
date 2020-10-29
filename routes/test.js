@@ -4,7 +4,7 @@ var router = express.Router();
 router.get("/", function (req, res, next) {
   const data = {
     data: {
-      msg: `Server working`,
+      msg: `Server up and running`,
     },
   };
 
