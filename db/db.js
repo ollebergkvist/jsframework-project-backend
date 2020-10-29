@@ -10,7 +10,10 @@ if (process.env.NODE_ENV === "test") {
 const StartMongoServer = async () => {
   try {
     await mongoose.connect(db, {
+      useFindAndModify: false,
       useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
     });
   } catch (err) {
     console.log(err);
