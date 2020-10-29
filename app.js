@@ -1,7 +1,6 @@
 // Essentials
 require("dotenv").config(); // Use dotenv for env variables
 const express = require("express"); // Module to run express server
-const compression = require("compression"); // Module to compress responses
 const rateLimit = require("express-rate-limit"); // Module to limit repeated requests to API
 const morgan = require("morgan"); // Module to log requests
 const cors = require("cors"); // Module to allow clients from other domains to retrieve data from API
@@ -24,6 +23,7 @@ const findOne = require("./routes/findone");
 const deposit = require("./routes/deposit");
 const purchase = require("./routes/purchase");
 const sell = require("./routes/sell");
+const test = require("./routes/test");
 
 // rateLimit config
 const limiter = rateLimit({
@@ -37,11 +37,11 @@ StartMongoServer();
 // Initialize middleware
 app.use(limiter);
 app.use(cors()); // Use cors module
-app.use(compression()); // Enable gzip compression
 app.use(bodyParser.json()); // Supports parsing of application/json type post data
 app.use(bodyParser.urlencoded({ extended: true })); // Supports parsing of application/x-www-form-urlencoded post data
 
 // Initialize router middleware
+app.use("/test", test);
 app.use("/signup", signup);
 app.use("/login", login);
 app.use("/findall", findAll);
@@ -112,6 +112,7 @@ setInterval(() => {
 // Starts server and sets what port to listen to
 const expressServer = server.listen(port, () => {
   console.log("Express server is up and running"); // Prints message
+  console.log(port);
 });
 
 // Add routes for 404 and error handling
