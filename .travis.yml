@@ -1,0 +1,25 @@
+language: node_js
+
+node_js:
+    - "node"
+    - "12"
+
+sudo: false
+
+git:
+    submodules: false
+
+services:
+    - mongodb
+
+before_script:
+    - npm install
+    - sleep 15
+    - mongo test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+
+script:
+    - npm test
+
+after_success:
+    - npm run report-coveralls
+    - npm run report-codecov

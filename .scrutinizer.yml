@@ -1,0 +1,12 @@
+build:
+    nodes:
+        coverage:
+            tests:
+                override:
+                    - js-scrutinizer-run
+                    - command: npm test
+                      coverage:
+                          file: coverage/clover.xml
+                          format: clover
+            services:
+                mongo: 3.6.2
