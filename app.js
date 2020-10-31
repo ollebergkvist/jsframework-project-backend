@@ -6,12 +6,12 @@ const morgan = require("morgan"); // Module to log requests
 const cors = require("cors"); // Module to allow clients from other domains to retrieve data from API
 const fs = require("fs"); // Module to work with filesystem
 const path = require("path"); // Module to work with directories and file paths
-const app = express(); // Exec express
 const bodyParser = require("body-parser"); // Body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
 const StartMongoServer = require("./db/db");
 const rate = require("./models/stock");
-const server = require("http").Server(app);
-const io = require("socket.io")(server);
+const app = express(); // Exec express
+const server = require("http").createServer(app);
+const io = require("socket.io").listen(server);
 const port = process.env.SERVER_PORT;
 io.origins([process.env.SOCKET_ORIGIN]); // Allows defined client to communicate with server
 
@@ -32,22 +32,22 @@ const sell = require("./routes/sell");
 const test = require("./routes/test");
 
 // What to do when our maximum request rate is breached
-const limitReached = () => {
-  res.status(429).send("Too many requests. Try again later.");
-};
+// const limitReached = () => {
+//   res.status(429).send("Too many requests. Try again later.");
+// };
 
 // rateLimit config
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  onLimitReached: limitReached, // Call function to send error message
-});
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100, // limit each IP to 100 requests per windowMs
+//   onLimitReached: limitReached, // Call function to send error message
+// });
 
 // Create db connection
 StartMongoServer();
 
 // Initialize middleware
-app.use(limiter);
+// app.use(limiter);
 app.use(cors(corsOptions)); // Use cors module and defined options
 app.use(bodyParser.json()); // Supports parsing of application/json type post data
 app.use(bodyParser.urlencoded({ extended: true })); // Supports parsing of application/x-www-form-urlencoded post data
@@ -98,13 +98,6 @@ var walmart = {
 
 var stocks = [apple, walmart];
 
-io.on("connection", function (socket) {
-  console.log("a user connected");
-  socket.on("disconnect", function () {
-    console.log("user disconnected");
-  });
-});
-
 setInterval(() => {
   stocks.map((stock) => {
     if (stock.data.length > 12) {
@@ -124,7 +117,13 @@ setInterval(() => {
 // Starts server and sets what port to listen to
 const expressServer = server.listen(port, () => {
   console.log("Express server is up and running"); // Prints message
-  console.log(port);
+});
+
+io.on("connection", function (socket) {
+  console.log("a user connected");
+  socket.on("disconnect", function () {
+    console.log("user disconnected");
+  });
 });
 
 // Add routes for 404 and error handling
