@@ -15,6 +15,12 @@ const io = require("socket.io")(server);
 const port = process.env.SERVER_PORT;
 io.origins([process.env.SOCKET_ORIGIN]); // Allows defined client to communicate with server
 
+// CORS config
+var corsOptions = {
+  origin: process.env.SOCKET_ORIGIN,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
 // Imports routes defined in routes dir
 const signup = require("./routes/signup.js");
 const login = require("./routes/login.js");
@@ -25,10 +31,16 @@ const purchase = require("./routes/purchase");
 const sell = require("./routes/sell");
 const test = require("./routes/test");
 
+// What to do when our maximum request rate is breached
+const limitReached = () => {
+  res.status(429).send("Too many requests. Try again later.");
+};
+
 // rateLimit config
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
+  onLimitReached: limitReached, // Call function to send error message
 });
 
 // Create db connection
@@ -36,7 +48,7 @@ StartMongoServer();
 
 // Initialize middleware
 app.use(limiter);
-app.use(cors()); // Use cors module
+app.use(cors(corsOptions)); // Use cors module and defined options
 app.use(bodyParser.json()); // Supports parsing of application/json type post data
 app.use(bodyParser.urlencoded({ extended: true })); // Supports parsing of application/x-www-form-urlencoded post data
 
