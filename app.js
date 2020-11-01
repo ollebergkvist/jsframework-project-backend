@@ -8,12 +8,8 @@ const fs = require("fs"); // Module to work with filesystem
 const path = require("path"); // Module to work with directories and file paths
 const bodyParser = require("body-parser"); // Body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body
 const StartMongoServer = require("./db/db");
-const rate = require("./models/stock");
 const app = express(); // Exec express
-const server = require("http").createServer(app);
-const io = require("socket.io").listen(server);
 const port = process.env.SERVER_PORT;
-io.origins([process.env.SOCKET_ORIGIN]); // Allows defined client to communicate with server
 
 // CORS config
 var corsOptions = {
@@ -73,57 +69,9 @@ if (process.env.NODE_ENV !== "test") {
   app.use(morgan("combined", { stream: accessLogStream })); // 'combined' outputs the Apache style LOGs
 }
 
-// Socket.io
-var apple = {
-  label: "Apple Inc",
-  rate: 1.002,
-  variance: 1.9,
-  startingPoint: 120,
-  data: [],
-  borderWidth: 2,
-  borderColor: "#0275d8",
-  labels: [],
-};
-
-var walmart = {
-  label: "Walmart Inc",
-  rate: 1.001,
-  variance: 0.2,
-  startingPoint: 122,
-  data: [],
-  borderWidth: 2,
-  borderColor: "#5cb85c",
-  labels: [],
-};
-
-var stocks = [apple, walmart];
-
-setInterval(() => {
-  stocks.map((stock) => {
-    if (stock.data.length > 12) {
-      stock.data.shift();
-    }
-    if (stock.labels.length > 12) {
-      stock.labels.shift();
-    }
-    stock.labels.push(new Date().toLocaleTimeString("sv-SE"));
-    stock.data.push(rate.getStockPrice(stock));
-
-    return stock;
-  });
-  io.emit("stocks", stocks);
-}, 5000);
-
 // Starts server and sets what port to listen to
 const expressServer = server.listen(port, () => {
   console.log("Express server is up and running"); // Prints message
-});
-
-io.on("connection", function (socket) {
-  console.log("a user connected");
-  socket.on("disconnect", function () {
-    console.log("user disconnected");
-  });
 });
 
 // Add routes for 404 and error handling
