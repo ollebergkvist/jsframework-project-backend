@@ -70,7 +70,7 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 // Starts server and sets what port to listen to
-const expressServer = server.listen(port, () => {
+const server = app.listen(port, () => {
   console.log("Express server is up and running"); // Prints message
 });
 
@@ -83,4 +83,4 @@ app.use((req, res, next) => {
   next(err);
 });
 
-module.exports = expressServer; // Export server in order to use it in test files
+module.exports = server; // Export server in order to use it in test files
